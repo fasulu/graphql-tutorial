@@ -1,10 +1,23 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./schema/schema');
+const mongoose = require('mongoose');
+const config = require('../config');
 
 const app = express();
 
-const portNum = 3500;
+// const portNum = 3501;
+const portNum = config.port
+const mongoUrl = config.mongoURL
+
+mongoose.connect(mongoUrl, { useNewUrlParser: true})
+.then(() =>  console.log('Connected with mLab server database'))
+.catch(err => console.log(err))
+
+// mongoose.connect('mongodb+srv://graphql-tutorial:1234567890@cluster0.uvdug.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+// mongoose.connection.once('open', () =>{
+//   console.log("connected to database");
+// });
 
 app.use('/myquery', graphqlHTTP({
     schema,

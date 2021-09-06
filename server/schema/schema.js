@@ -1,6 +1,9 @@
 const graphql = require('graphql');
 const lodash = require('lodash');       // uitility tool library
 
+const Book = require('../models/book');
+const Author = require('../models/author');
+
 const { GraphQLObjectType,
     GraphQLString,
     GraphQLSchema,
@@ -10,22 +13,22 @@ const { GraphQLObjectType,
 
 // dummy datas for books and authors
 
-var books = [
-    { name: 'Name of the wind', genre: 'Fantasy', id: '1', authorId: '1' },
-    { name: 'The Final Empire', genre: 'Fantasy', id: '2', authorId: '2' },
-    { name: 'The Long Earth', genre: 'Sci-Fi', id: '3', authorId: '3' },
-    { name: 'The Samurai', genre: 'Fantasy', id: '4', authorId: '2' },
-    { name: 'The Hero of Ages', genre: 'Fantasy', id: '5', authorId: '3' },
-    { name: 'The Colour of Magic', genre: 'Fantasy', id: '6', authorId: '1' },
-    { name: 'The Light fantastic', genre: 'Fantasy', id: '7', authorId: '1' }
+// var books = [
+//     { name: 'Name of the wind', genre: 'Fantasy', id: '1', authorId: '1' },
+//     { name: 'The Final Empire', genre: 'Fantasy', id: '2', authorId: '2' },
+//     { name: 'The Long Earth', genre: 'Sci-Fi', id: '3', authorId: '3' },
+//     { name: 'The Samurai', genre: 'Fantasy', id: '4', authorId: '2' },
+//     { name: 'The Hero of Ages', genre: 'Fantasy', id: '5', authorId: '3' },
+//     { name: 'The Colour of Magic', genre: 'Fantasy', id: '6', authorId: '1' },
+//     { name: 'The Light fantastic', genre: 'Fantasy', id: '7', authorId: '1' }
 
-];
+// ];
 
-var authors = [
-    { name: 'Patrick', age: 45, id: '1', bookId: '3' },
-    { name: 'Brandon', age: 46, id: '2', bookId: '2' },
-    { name: 'Terry', age: 47, id: '3', bookId: '1' }
-];
+// var authors = [
+//     { name: 'Patrick', age: 45, id: '1', bookId: '3' },
+//     { name: 'Brandon', age: 46, id: '2', bookId: '2' },
+//     { name: 'Terry', age: 47, id: '3', bookId: '1' }
+// ];
 
 // declare schema type for books
 
@@ -42,7 +45,7 @@ const BookType = new GraphQLObjectType({
             type: AuthorType,
             resolve(parent, args) {
                 console.log(parent);
-                return lodash.find(authors, { id: parent.authorId });
+                // return lodash.find(authors, { id: parent.authorId });
             }
         }
     })
@@ -63,7 +66,7 @@ const AuthorType = new GraphQLObjectType({
             type: new GraphQLList(BookType),
             resolve(parent, args) {
                 console.log(parent);
-                return lodash.filter(books, { authorId: parent.id });
+                // return lodash.filter(books, { authorId: parent.id });
             }
         }
     })
@@ -83,7 +86,7 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
 
                 // code here to get data from db or other source
-                return lodash.find(books, { id: args.id });
+                // return lodash.find(books, { id: args.id });
             }
         },
 
@@ -95,7 +98,7 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent, args) {
 
                 // code here to get data from db or other source
-                return lodash.find(authors, { id: args.id });
+                // return lodash.find(authors, { id: args.id });
             }
         },
 
@@ -104,7 +107,7 @@ const RootQuery = new GraphQLObjectType({
         books:{
             type:new GraphQLList(BookType),
             resolve(parent,args){
-                return books
+                // return books
             }
         },
 
@@ -113,7 +116,7 @@ const RootQuery = new GraphQLObjectType({
         authors:{
             type:new GraphQLList(AuthorType),
             resolve(parent, args) {
-                return authors
+                // return authors
             }
         }
     }
