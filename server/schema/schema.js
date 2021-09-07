@@ -11,8 +11,6 @@ const { GraphQLObjectType,
   GraphQLNonNull,
   GraphQL } = graphql;
 
-  // https://www.youtube.com/watch?v=H8oRezNak2s&list=PL4cUxeGkcC9iK6Qhn-QLcXCXPQUov1U7f&index=19
-
 // declare schema type for books
 
 const BookType = new GraphQLObjectType({
