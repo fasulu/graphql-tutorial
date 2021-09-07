@@ -1,6 +1,4 @@
 const graphql = require('graphql');
-const lodash = require('lodash');       // uitility tool library
-
 const Book = require('../models/book');
 const Author = require('../models/author');
 
@@ -9,7 +7,9 @@ const { GraphQLObjectType,
   GraphQLSchema,
   GraphQLID,
   GraphQLInt,
-  GraphQLList } = graphql;
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQL } = graphql;
 
   // https://www.youtube.com/watch?v=H8oRezNak2s&list=PL4cUxeGkcC9iK6Qhn-QLcXCXPQUov1U7f&index=19
 
@@ -28,7 +28,8 @@ const BookType = new GraphQLObjectType({
       type: AuthorType,
       resolve(parent, args) {
         console.log(parent);
-        // return lodash.find(authors, { id: parent.authorId });
+        
+        return Author.findById(parent.authorId);
       }
     }
   })
@@ -49,7 +50,8 @@ const AuthorType = new GraphQLObjectType({
       type: new GraphQLList(BookType),
       resolve(parent, args) {
         console.log(parent);
-        // return lodash.filter(books, { authorId: parent.id });
+        
+        return Book.find({authorId:parent.id})
       }
     }
   })
@@ -68,8 +70,7 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
 
-        // code here to get data from db or other source
-        // return lodash.find(books, { id: args.id });
+        return Book.findById(args.id);
       }
     },
 
@@ -79,9 +80,8 @@ const RootQuery = new GraphQLObjectType({
       type: AuthorType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-
-        // code here to get data from db or other source
-        // return lodash.find(authors, { id: args.id });
+        
+        return Author.findById(args.id);
       }
     },
 
@@ -91,6 +91,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(BookType),
       resolve(parent, args) {
         // return books
+        return Book.find({});
       }
     },
 
@@ -99,7 +100,8 @@ const RootQuery = new GraphQLObjectType({
     authors: {
       type: new GraphQLList(AuthorType),
       resolve(parent, args) {
-        return authors
+        // return authors
+        return Author.find({})
       }
     }
   }
@@ -113,11 +115,11 @@ const Mutation = new GraphQLObjectType({
     addAuthor: {
       type: AuthorType,
       args: {
-        name: { type: GraphQLString },
-        age: { type: GraphQLInt }
+        name: { type: new GraphQLNonNull(GraphQLString)},
+        age: { type: new GraphQLNonNull(GraphQLInt)}
       },
       resolve(parent, args) {
-        let author = new Author({
+        let author = new Author({     //  "Author" is Author model which is imported above
           name: args.name,
           age: args.age
         });
@@ -127,13 +129,15 @@ const Mutation = new GraphQLObjectType({
     addBook: {
       type: BookType,
       args: {
-        name: { type: GraphQLString },
-        genre: { type: GraphQLString }
+        name: { type: new GraphQLNonNull(GraphQLString)},
+        genre: { type: new GraphQLNonNull(GraphQLString)},
+        authorId:{type: new GraphQLNonNull(GraphQLID)}
       },
       resolve(parent, args) {
-        let book = new Book({
+        let book = new Book({         //  "Book" is Book model which is imported above
           name: args.name,
-          genre: args.genre
+          genre: args.genre,
+          authorId: args.authorId
         });
         return book.save();
       }
@@ -199,6 +203,20 @@ How to use query format in the browser
     name
     author {
       name
+    }
+  }
+}
+
+*******
+
+{
+  book(id: 1) {
+    name
+    author {
+      name
+      books{
+        name
+      }
     }
   }
 }
