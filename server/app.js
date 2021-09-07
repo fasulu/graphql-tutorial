@@ -14,7 +14,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true})
 .then(() =>  console.log('Connected with mLab server database'))
 .catch(err => console.log(err))
 
-// mongoose.connect('mongodb+srv://graphql-tutorial:1234567890@cluster0.uvdug.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+// mongoose.connect('mongodb+srv://graphql-tutorial:<password>@cluster0.uvdug.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 // mongoose.connection.once('open', () =>{
 //   console.log("connected to database");
 // });
